@@ -14,6 +14,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,9 +29,9 @@ SECRET_KEY = 'django-insecure-h416)m06gnbo2&_@=t%4g(6ud$!uwccp41$(95x2=h3zo)29xd
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG_MODE')
 
-ALLOWED_HOSTS = ["7856-188-27-129-56.ngrok-free.app", "127.0.0.1"]
+ALLOWED_HOSTS = ["f602-188-27-129-56.ngrok-free.app", "127.0.0.1", "localhost"]
 
-
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,10 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'rest_framework',
     'api',
     'user',
-    'accounts'
+    'payment',
+    'generate'
 ]
 
 MIDDLEWARE = [
@@ -54,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'api.urls'
@@ -92,6 +96,14 @@ DATABASES = {
     }
 }
 
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "user.authentication.Auth0JWTAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
