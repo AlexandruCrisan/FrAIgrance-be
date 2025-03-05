@@ -25,6 +25,7 @@ class CurrentUserView(APIView):
 
     def get(self, request):
         user = request.user
+        print(type(user))
         serializer = UserSerializer(user)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
