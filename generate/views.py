@@ -20,7 +20,7 @@ class GenerateStoryView(APIView):
         client = openai.OpenAI()
 
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",  # or "gpt-4" for higher-quality responses
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": (
                     "You are a master storyteller who crafts immersive, emotionally rich short stories. "
@@ -31,7 +31,7 @@ class GenerateStoryView(APIView):
                 {"role": "user", "content": (
                     f"Write a short story that captures the essence of the feelings induces by the perfume: {data}. "
                     f"The story should immerse the reader in a vivid experience that conveys this feeling without mentioning scent or perfume."
-                    f"\n\nReturn only a JSON object with a single key 'story'."
+                    f"\n\nReturn only a JSON object with 2 keys: 'title' and 'story'."
                 )}
             ],
             response_format={"type": "json_object"},
@@ -55,10 +55,8 @@ class GenerateStoryView(APIView):
 
     def post(self, request):
         data = request.data
-        print(f"{data=}")
         story = self.__generate_journey(data)
 
-        Story.objects.create(user=request.user, content=story["story"])
+        Story.objects.create(user=request.user, content=story["story"], title=story["title"])
 
-        # story = self.__generate_journey(data)
         return Response(story, status=200)

@@ -12,7 +12,6 @@ load_dotenv()
 
 
 class CheckoutSessionView(APIView):
-    # Allow unauthenticated users to sign up
     permission_classes = [IsAuthenticated]
     stripe.api_key = os.getenv("STRIPE_API_SECRET_KEY")
 
@@ -38,7 +37,6 @@ class CheckoutSessionView(APIView):
             success_url=os.getenv("CLIENT_URL"),
             metadata={"email": user.email},
             customer_email=user.email,
-
         )
 
         return Response({"url": session.url}, status=200)
