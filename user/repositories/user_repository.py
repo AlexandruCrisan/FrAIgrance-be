@@ -15,3 +15,10 @@ class UserRepository:
         user = User.objects.create(
             auth0_id=auth0_id, email=email, username=username)
         return user
+
+    @staticmethod
+    def update_user(user: User, **kwargs):
+        for key, value in kwargs.items():
+            setattr(user, key, value)
+        user.save()
+        return user

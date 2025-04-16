@@ -1,10 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
 import openai
 from rest_framework.response import Response
 import json
 from user.services.user_service import UserService
 from .models import Story
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 
@@ -59,4 +62,20 @@ class GenerateStoryView(APIView):
 
         Story.objects.create(user=request.user, content=story["story"], title=story["title"])
 
+        # Update user credits
+        user = request.user
+
+        user.credits -= 4
+        user.save()
+
         return Response(story, status=200)
+
+
+class StoryDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, pk, *args, **kwargs):
+        print(f"Deleting article with ID: {pk}")
+        article = get_object_or_404(Story, pk=pk)
+        article.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
