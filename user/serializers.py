@@ -8,7 +8,6 @@ from generate.serializers import StorySerializer
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
-        # Disable `jti` check (not present in Auth0 tokens)
         return data
 
 

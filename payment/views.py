@@ -47,7 +47,6 @@ class StripeWebhook(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        print("PAYMENT PROC")
         payload = request.body
         sig_header = request.META.get("HTTP_STRIPE_SIGNATURE")
         endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
@@ -66,8 +65,8 @@ class StripeWebhook(APIView):
 
             # Determine how many credits the user bought
             total_credits = session.get('amount_total') / 100 / 0.5
-            print(session)
-            print(f"User {user_email} bought {total_credits} credits!")
+            # print(session)
+            # print(f"User {user_email} bought {total_credits} credits!")
             # Update user's credit balance
             user = User.objects.get(email=user_email)
             user.credits += total_credits

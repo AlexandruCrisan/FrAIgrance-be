@@ -62,7 +62,6 @@ class GenerateStoryView(APIView):
 
         Story.objects.create(user=request.user, content=story["story"], title=story["title"])
 
-        # Update user credits
         user = request.user
 
         user.credits -= 4
@@ -75,7 +74,6 @@ class StoryDeleteView(APIView):
     permission_classes = [IsAuthenticated]
 
     def delete(self, request, pk, *args, **kwargs):
-        print(f"Deleting article with ID: {pk}")
         article = get_object_or_404(Story, pk=pk)
         article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

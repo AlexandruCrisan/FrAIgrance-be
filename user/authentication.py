@@ -8,14 +8,12 @@ from .models import User
 
 class Auth0JWTAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
-        print("Using custom Auth0JWTAuthentication class!")
         load_dotenv()
         token = self._get_token(request)
         if not token:
             return None
 
         try:
-            # Fetch Auth0's public keys to validate the JWT
             jwks_client = PyJWKClient(
                 f"https://{os.getenv('AUTH0_DOMAIN')}/.well-known/jwks.json")
             signing_key = jwks_client.get_signing_key_from_jwt(token)
